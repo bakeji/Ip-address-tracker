@@ -60,8 +60,9 @@
         // fetching the geo-locaion data with the user ip address or the ip inputed by the user
       async function fetchLocationData() {
         const ipAddress = showLocationData ? getInputData : getUserIp;
+        const apiKey= import.meta.env.VITE_API_KEY;
         try {
-          const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=at_Jk8mrKQhBuN14T1TfmYTshX4jOTwF&ipAddress=${ipAddress}`);
+          const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}&ipAddress=${ipAddress}`);
           const responseData = await response.json();
           const data = {
             city: responseData.location.city,
