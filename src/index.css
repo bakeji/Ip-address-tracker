@@ -11,7 +11,7 @@ body{
   text-align: center;
 }
 .tp{
-  background: url(images/pattern-bg-desktop.png);
+  background: url(../images/pattern-bg-desktop.png);
   background-repeat: no-repeat;
   width: 100%;
   /* margin-bottom: 30px; */
