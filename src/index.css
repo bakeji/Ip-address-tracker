@@ -124,7 +124,8 @@ border-radius: 0% 20% 20% 0%;
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: -1; /* Push the map to the background */
+  z-index: -1; 
+  margin-top: 8%;
 }
 /* media query for mobile */
 @media screen and (max-width:428px){
@@ -149,6 +150,7 @@ border-radius: 0% 20% 20% 0%;
   input::placeholder{
     font-size: 12px;
   }
+  
 }
 
 
