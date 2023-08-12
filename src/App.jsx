@@ -7,47 +7,17 @@
       const [getInputData, setGetInputData]= useState("")
       const [locationData, setLocationData]= useState({})
       const [showLocationData, setShowLocationData] =useState(false)
-      const [isloading, setIsLoading] =useState(false)
-      const [getUserIp, setGetUserIp]=useState({})
-
+      const [isloaded, setIsLoaded] =useState(false)
+      const [getUserIp, setGetUserIp]=useState("")
 
       function handleChange(event){
         setGetInputData(event.target.value)
       }
-
-      // function fetchUserIP() {
-      //   fetch("https://api.ipify.org?format=json")
-      //     .then((res) => res.json())
-      //     .then((data) => {
-      //       setGetUserIp(data.ip);
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error fetching user's IP:", error);
-      //     });
-      //   }
-
-
-      // showData button
-      function showData(){
-        if(getInputData!==""){
-          setShowLocationData(true)
-          fetchLocationData()
-        }
-        console.log("yeah")
-      }
-
-      // fetching user ip address and their geo-location data on first load
       useEffect(()=>{
-        if(getInputData===""& !showLocationData){
-             fetchUserIP()
-          fetchLocationData()
-        }
-      }, [])
+      
+      },[getInputData, getUserIp])
 
-      useEffect(()=>{
-      },[getInputData])
-
-      // fetch the user ip
+      // function to fetch the user ip
       async function fetchUserIP() {
         try {
           const response = await fetch("https://api.ipify.org?format=json");
@@ -57,12 +27,21 @@
           console.error("Error fetching user's IP:", error);
         }
       }
-        // fetching the geo-locaion data with the user ip address or the ip inputed by the user
+
+ // fetch user ip address and their geo-location data on first load
+      useEffect(()=>{
+        if(getInputData==="" && getUserIp!==""){
+             fetchUserIP()
+          fetchLocationData()
+        }
+      }, [])
+
+
+// fetching the geo-locaion data with the user ip address or the ip inputed by the user
       async function fetchLocationData() {
-        const ipAddress = showLocationData ? getInputData : getUserIp;
         const apiKey= import.meta.env.VITE_API_KEY;
         try {
-          const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}&ipAddress=${ipAddress}`);
+          const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}&ipAddress=${showLocationData? getInputData : getUserIp}`);
           const responseData = await response.json();
           const data = {
             city: responseData.location.city,
@@ -79,9 +58,26 @@
           console.error("Error fetching data:", error);
           setLocationData({});
         }
-        setIsLoading(true)
       }
 
+      // showData button
+      function showData(){
+        if(getInputData!==""){
+          setShowLocationData(true)
+          fetchLocationData()
+        }
+      }
+      useEffect(()=>{
+        renderMap()
+      }, [])
+      
+      function renderMap() {
+        if (locationData.lats !== undefined && locationData.lngs !== undefined) {
+          setIsLoaded(true);
+        }
+      }
+
+      
 
 
     return (
@@ -105,12 +101,19 @@
           />
           </div>
 
-          <div className="map">
+          <div className={isloaded? "map": ""}>
+
+            {isloaded? (
         <Map 
         latitude ={locationData.lats}
         longtitude ={locationData.lngs} 
-        isloading ={isloading}/>
+        isloaded ={isloaded}/>)
+        :
+        <p className="load">is loading.....</p>
+            }
         </div>
+            
+            
           
         </div>
       
