@@ -3,6 +3,8 @@ import React from "react";
 export default function Result(props){
     return(
         <div className="result">
+            {props.showResult?(
+                <>
             <div className="ip-ad">
                 <p> IP ADDRESS</p>
                 <h3>{props.ipAddress}</h3>
@@ -22,7 +24,12 @@ export default function Result(props){
                 <p>ISP</p>
                 <h3>{props.isp}</h3>
             </div>
-
+            </>
+): (
+    <div className="loading-container">
+    <div className="loading-spinner"></div>
+    </div>
+            )}
         </div>
     )
 }
